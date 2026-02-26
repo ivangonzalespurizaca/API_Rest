@@ -1,11 +1,14 @@
 package com.veterinaria.api.controller;
 
 import com.veterinaria.api.models.MascotaAdopcion;
+import com.veterinaria.api.repository.MascotaAdopcionRepository;
 import com.veterinaria.api.service.MascotaAdopcionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/adopciones")
@@ -14,6 +17,8 @@ public class MascotaAdopcionController {
 
     @Autowired
     private MascotaAdopcionService service;
+    @Autowired
+    private MascotaAdopcionRepository repository;
 
     // 1. ENDPOINT PARA GUARDAR
     @PostMapping("/guardar")
@@ -30,6 +35,12 @@ public class MascotaAdopcionController {
             return ResponseEntity.ok(mascotaEditada);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<MascotaAdopcion>> listar() {
+        List<MascotaAdopcion> mascotas = repository.findAll();
+        return ResponseEntity.ok(mascotas);
     }
 
     // 3. ENDPOINT PARA ELIMINAR (Con validación de estado)
